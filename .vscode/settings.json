@@ -1,0 +1,14 @@
+{
+    "editor.suggestOnTriggerCharacters": false,
+    "terminal.integrated.suggest.suggestOnTriggerCharacters": false,
+    "editor.suggest.selectionMode": "never",
+    "github.copilot.enable": {
+        "*": false
+    },
+    "files.associations": {
+        "iostream": "cpp",
+        "vector": "cpp",
+        "cmath": "cpp",
+        "complex": "cpp"
+    }
+}
