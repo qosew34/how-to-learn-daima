@@ -13,6 +13,8 @@ void无返回值，有return写int或者double
 倒序搜索：1003
 getline：读真全部一行，无视换行符
 cin>> ：读到第一个空格
+(条件?条件成立：条件不成立)
+vector<vector<pair<int, int>>>存整数对的二维数组
 pow(x,a)==a^x
 floor,ceil
 sort用法：sort(tp,tp+3);/*tp指向第一个元素，tp+n(n为元素个数)指向最后一个元素之后的位置*/(tp是数组名字)
