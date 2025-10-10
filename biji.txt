@@ -6,7 +6,9 @@ string某项是char
 善用数论，同余.
 初始化初始化初始化
 void无返回值，有return写int或者double
+有条件用longlong!!!
 0.00是-0.00
+考虑0的情况
 奇葩输入：1957
 递归：1010
 二分：1024
@@ -25,7 +27,7 @@ char ch =static_cast<char>(65); ch=a
 a是97 z是122 A65 Z90
 \1指的是ascii中的1
 最好有初始化数值
-
+//字典序会自动对此，不存在的补0，a>0
 实数是double不是int
 push_back(to_string (a))把a转成string再塞进去
 <=
