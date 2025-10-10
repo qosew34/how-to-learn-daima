@@ -1,55 +1,67 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int m,n,total_time;
-vector<vector<int>> lc(m,vector<int>(total_time,0));//总的流程
-vector<vector<int>> record(n,vector<int> (m,0));
-/*记录工件对应机器号*/
-vector<vector<int>> exhausted_time(n,vector<int>(m,0));
-//机器用的时间
-vector<int> gj_end_time(n,0);//当前工件可以从哪里开始写
-vector<int> machine_max_time(m,0);
-void jg(int gjnum,int gxnum){//工件，工序，读用的机器，塞进去
-//第一步，读机器
-int machine_num;
-machine_num=record[gjnum][gxnum];
-//第二步，读时间
-int used_time;
-used_time=exhausted_time[gjnum][gxnum];
-//第三步，填
-//已经用到p了
-if(gj_end_time[gjnum]>machine_max_time){
-    
-}
-for(int q=gj_end_time[gjnum];q<machine_max_time[machine_num]+1;q++){
-    int accomplish=0;
-    if ()
-}
-}
 int main(){
+    int m,n;
     cin>>m>>n;//m机器n工件
-    vector<int> sx={0};//顺序
-    int temp;
-    for(int i=0;i<m*m;i++){
+    vector<vector<int>> record(n+1,vector<int> (m+1,0));
+    /*记录工件对应机器号*/
+    vector<vector<int>> exhausted_time(n+1,vector<int>(m+1,0));
+    //机器用的时间
+    vector<int> sx;//顺序
+    int temp=0;
+    for(int i=0;i<m*n;i++){
         cin>>temp;
         sx.push_back(temp);
     }
-    for(int j=0;j<n;j++){
-        for(int k=0;k<m;k++){
+    for(int j=1;j<=n;j++){
+        for(int k=1;k<=m;k++){
             cin>>temp;
-            record[n][m]=temp;
+            record[j][k]=temp;
         }
     }
-    for(int l=0;l<n;l++){
-        for(int o=0;o<m;o++){
+    for(int l=1;l<=n;l++){
+        for(int o=1;o<=m;o++){
             cin>>temp;
-            exhausted_time[n][n]=temp;
+            exhausted_time[l][o]=temp;
         }
     }
     //开始拼时间表
-    vector<int> gx={1};//第x位代表第x个零件到第几步
-    for(int p=0;p<m*n;p++){
-        jg(sx[p],gx[sx[p]]);
-        gx[sx[p]]++;//做完这一步到下一步
+    vector<vector<pair<int, int>>> machine_busy(m+1);
+    //机器忙碌时间
+    // start_time[j][k]: 第 j 个工件的第 k 道工序的开始时间
+    vector<vector<int>> start_time(n+1, vector<int>(m+1, -1));
+    // end_time[j][k]: 第 j 个工件的第 k 道工序的结束时间
+    vector<vector<int>> end_time(n+1, vector<int>(m+1, -1));
+    int total_time=0;
+    vector<int> current_gj(n+1,1);//第几个工件到哪了
+    for(int i=0;i<n*m;i++){
+        int j=sx[i];//在做哪个
+        int k=current_gj[j]++;//第几步
+        int mac_num=record[j][k];//哪个机器
+        int use_time=exhausted_time[j][k];//要用多久
+        int best_start_time=(k==1?0:end_time[j][k-1]);
+        int t=best_start_time;
+        for(size_t j=0;j<machine_busy[mac_num].size();j++){//sizet 无符号整型
+            auto& busytime=machine_busy[mac_num][j];//遍历busytime
+            int s=busytime.first;int e=busytime.second;
+            if(t+use_time<=s){
+                break;
+            }
+            else if(t<e){
+                t=e;
+            }
+        }
+            start_time[j][k]=t;
+            int et = t+use_time;
+            end_time[j][k]=et;
+            machine_busy[mac_num].push_back({t,et});
+            sort(machine_busy[mac_num].begin(),machine_busy[mac_num].end());
+            total_time=max(total_time,et);
     }
+        cout<<total_time<<endl;
+        return 0;
+    
 }
+/*busytime是一个对忙碌时间的引用，试图遍历
+busytime.fisrt()是pair的第一个，second是第二个即结束时间*/
