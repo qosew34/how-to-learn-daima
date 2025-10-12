@@ -49,8 +49,7 @@ sc(n,total);
 cout<<total;
 }好一点，但还是有一些tle*/
 #include <bits/stdc++.h>
-using namespace std;
-
+using namespace std; 
 int main(){
     int n;
     cin>>n;
