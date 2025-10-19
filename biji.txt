@@ -33,7 +33,9 @@ a是97 z是122 A65 Z90
 实数是double不是int
 push_back(to_string (a))把a转成string再塞进去
 <=
-
+二分最好用low，high，不然会被嫌弃
+vector名字.pop_back 回溯
+我感觉还得理解一下：1219
 pow(2,n):2^n
 位运算
 | 运算符  | 名称       | 例子     | 结果（二进制）              | 结果（十进制）         |   |
