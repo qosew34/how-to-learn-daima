@@ -2,15 +2,19 @@
 变量名字不能输错
 if内==
 冒泡排序
+std::sort(data.begin(), data.end(), 
+              [](const std::vector<int>& a, const std::vector<int>& b) {
+                  return a[1] < b[1];
+              });
+              二维数组的升序排列
 string某项是char
+小知识：if int……只在int生效
 善用数论，同余.
 初始化初始化初始化
-void无返回值，有return写int或者double
 有条件用longlong!!!
 0.00是-0.00
 考虑0的情况
 奇葩输入：1957
-递归：1010
 二分：1024
 倒序搜索：1003
 1928 栈与pair
