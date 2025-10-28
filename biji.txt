@@ -29,7 +29,7 @@ int qpow(int a, int n)
     }
 }
 
-
+    a.assign(R, vector<int>(C));声明二维数组
 vector.swap(vectorb)交换
 奇葩输入：1957
 二分需要+-1便于修正
