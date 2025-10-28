@@ -14,6 +14,23 @@ string某项是char
 有条件用longlong!!!
 0.00是-0.00
 考虑0的情况
+
+快速幂
+int qpow(int a, int n)
+{
+    if (n == 0)
+        return 1;
+    else if (n % 2 == 1)
+        return qpow(a, n - 1) * a;
+    else
+    {
+        int temp = qpow(a, n / 2);
+        return temp * temp;
+    }
+}
+
+
+vector.swap(vectorb)交换
 奇葩输入：1957
 二分需要+-1便于修正
 倒序搜索：1003
