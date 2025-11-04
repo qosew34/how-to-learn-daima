@@ -1,12 +1,60 @@
 /*用str，重写！*/
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <algorithm>
 using namespace std;
 
-int main(){
-string m;
-int n;
-cin>>n>>m;
+int charToVal(char c) {
+    if ('0' <= c && c <= '9') return c - '0';
+    return c - 'A' + 10;
+}
 
+char valToChar(int x) {
+    if (x < 10) return '0' + x;
+    return 'A' + x - 10;
+}
+
+bool isPalindrome(const string& s) {
+    return equal(s.begin(), s.end(), s.rbegin());
+}
+
+
+string addBase(const string& a, const string& b, int base) {
+    string res;
+    int len = max(a.size(), b.size());
+    int carry = 0;
+    for (int i = 0; i < len; ++i) {
+        int va = i < a.size() ? charToVal(a[a.size() - 1 - i]) : 0;
+        int vb = i < b.size() ? charToVal(b[b.size() - 1 - i]) : 0;
+        int sum = va + vb + carry;
+        carry = sum / base;
+        sum %= base;
+        res += valToChar(sum);
+    }
+    if (carry) res += valToChar(carry);
+    reverse(res.begin(), res.end());
+    return res;
+}
+
+int main() {
+    int N;
+    string M;
+    cin >> N >> M;
+    transform(M.begin(), M.end(), M.begin(), ::toupper);
+    
+    int step = 0;
+    while (step <= 30) {
+        if (isPalindrome(M)) {
+            cout <<"STEP="<<step << endl;
+            return 0;
+        }
+        string revM = M;
+        reverse(revM.begin(), revM.end());
+        M = addBase(M, revM, N);
+        ++step;
+    }
+    cout << "Impossible!" << endl;
+    return 0;
 }
 
 
