@@ -1,17 +1,5 @@
-注意事项：xy分清楚，不能写反
-变量名字不能输错
-if内==
-冒泡排序
-std::sort(data.begin(), data.end(), 
-              [](const std::vector<int>& a, const std::vector<int>& b) {
-                  return a[1] < b[1];
-              });
-              二维数组的升序排列
+
 string某项是char
-小知识：if int……只在int生效
-善用数论，同余.
-初始化初始化初始化
-有条件用longlong!!!
 0.00是-0.00
 考虑0的情况
 
@@ -36,25 +24,22 @@ vector.swap(vectorb)交换
 倒序搜索：1003
 1928 栈与pair
 堆 1090
-getline：读真全部一行，无视换行符
-cin>> ：读到第一个空格
+
 (条件?条件成立：条件不成立)
 vector<vector<pair<int, int>>>存整数对的二维数组
 pow(x,a)==a^x
 floor,ceil
 sort用法：sort(tp,tp+3);/*tp指向第一个元素，tp+n(n为元素个数)指向最后一个元素之后的位置*/(tp是数组名字)
 大数计算：1009 #include <gmp.h> apt install libgmp-dev（或者用python）
-!!! -'0' ascii变数字
+
 int ascii = static_cast<int>(ch); ascii=65
 char ch =static_cast<char>(65); ch=a
+
 a是97 z是122 A65 Z90
 \1指的是ascii中的1
-最好有初始化数值
+
 //字典序会自动对此，不存在的补0，a>0
 实数是double不是int
-push_back(to_string (a))把a转成string再塞进去
-<=
-二分最好用low，high，不然会被嫌弃
 vector名字.pop_back 回溯
 我感觉还得理解一下：1219
 pow(2,n):2^n
@@ -85,3 +70,10 @@ vector<int> generatePrimes(int limit) {
     }
     return primes;
 }
+
+lambda表达式
+[捕获列表](参数列表) -> 返回值类型 {函数体} 
+auto cmp = [](const pii& a, const pii& b) {
+if(a.first == b.first) return a.second > b.second; //值小优先
+return a.first > b.first; //次数小优先
+     };
