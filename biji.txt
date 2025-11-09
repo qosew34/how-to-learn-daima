@@ -77,3 +77,90 @@ auto cmp = [](const pii& a, const pii& b) {
 if(a.first == b.first) return a.second > b.second; //值小优先
 return a.first > b.first; //次数小优先
      };
+
+   priority_queue<pii, vector<pii>, decltype(cmp)> pq(cmp);
+   让优先级队列用你的lambda表达式
+
+   vector<vector<int>> 邻接表
+   邻接表[1]={1,2,3}
+   for(int &temp:邻接表)
+
+   并查集
+#include <vector>
+
+// 并查集结构体：支持路径压缩和按秩合并
+struct UnionFind {
+    std::vector<int> parent; // parent[i] 表示 i 的父节点
+    std::vector<int> rank;   // rank[i] 用于优化：表示以 i 为根的树的深度
+
+    // 构造函数，初始化 n 个节点
+    UnionFind(int n) {
+        parent.resize(n + 1); // 通常节点编号从 1 到 n，如果是从 0，则 n
+        rank.resize(n + 1, 0);
+        for (int i = 1; i <= n; ++i) {
+            parent[i] = i; // 初始时每个节点自成一个集合
+        }
+    }
+
+    // 查找操作——返回 x 所在集合的根，同时做路径压缩
+    int find(int x) {
+        if (parent[x] != x) {
+            // 路径压缩：让每个祖先节点直接指向根节点
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    // 合并操作——把 x 和 y 所在集合合并
+    // 按秩合并：小树接到大树下面
+    void unite(int x, int y) {
+        int fx = find(x); // 找 x 的根
+        int fy = find(y); // 找 y 的根
+        if (fx == fy) return; // 已经在同一个集合，无需合并
+
+        // 按秩合并
+        if (rank[fx] < rank[fy]) {
+            parent[fx] = fy; // fx 的树接到 fy 上
+        } else if (rank[fx] > rank[fy]) {
+            parent[fy] = fx; // fy 的树接到 fx 上
+        } else {
+            parent[fy] = fx;
+            rank[fx]++; // 合并后高度增加
+        }
+    }
+
+    // 判断两个节点是否在同一集合
+    bool same(int x, int y) {
+        return find(x) == find(y);
+    }
+};
+
+// 使用方法举例：
+// UnionFind uf(n); // 构造 n 个节点的并查集
+// uf.unite(1,2); // 合并 1 和 2
+// uf.unite(3,4); // 合并 3 和 4
+// if (uf.same(1,2)) {...} // 判断 1 和 2 是否连通
+// int root = uf.find(3); // 查找 3 所在集合的根
+
+find函数没找到返回x.end()，否则返回这个元素的指针
+
+正则表达式
+(d[i] >= 80 && d[i] <= 100) ? 0 : (d[i] > 60 && d[i] <= 80) ? 1 : 2
+
+
+
+multiset
+1.
+std::multiset 是 C++ STL (标准模板库) 中的一种关联容器。它内部实现为红黑树等平衡二叉树结构。与 set 的主要区别在于 multiset 允许元素重复，即多个元素可以拥有相同的值。
+
+2. 主要特性
+允许重复元素：同一个值可以插入多次，每次都被视为独立元素。
+自动有序：插入的元素会自动按照指定的排序方式（默认升序）排列。
+元素不可修改：插入后元素的值不可被更改（只能删除再插入）。
+3. 常用操作
+插入元素：使用 insert()。
+查询元素计数：使用 count() 查看某个元素出现的次数。
+查找元素：使用 find() 查找某个值的位置，返回迭代器。
+区间查找：使用 equal_range() 查找所有等于某个值的元素范围。
+删除元素：可以使用 erase() 按值或通过迭代器删除元素。
+遍历容器：可以用迭代器依次访问容器中的元素。
