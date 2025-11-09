@@ -1,5 +1,3 @@
-
-string某项是char
 0.00是-0.00
 考虑0的情况
 
@@ -17,8 +15,7 @@ int qpow(int a, int n)
     }
 }
 
-    a.assign(R, vector<int>(C));声明二维数组
-vector.swap(vectorb)交换
+a.assign(R, vector<int>(C));声明二维数组
 奇葩输入：1957
 二分需要+-1便于修正
 倒序搜索：1003
@@ -31,7 +28,7 @@ pow(x,a)==a^x
 floor,ceil
 sort用法：sort(tp,tp+3);/*tp指向第一个元素，tp+n(n为元素个数)指向最后一个元素之后的位置*/(tp是数组名字)
 大数计算：1009 #include <gmp.h> apt install libgmp-dev（或者用python）
-
+insert插入某目标值在目标位置前方直接给it就行，不用-1
 int ascii = static_cast<int>(ch); ascii=65
 char ch =static_cast<char>(65); ch=a
 
@@ -42,7 +39,6 @@ a是97 z是122 A65 Z90
 实数是double不是int
 vector名字.pop_back 回溯
 我感觉还得理解一下：1219
-pow(2,n):2^n
 位运算
 | 运算符  | 名称       | 例子     | 结果（二进制）              | 结果（十进制）         |   |
 | ---- | -------- | ------ | -------------------- | --------------- | - |
@@ -56,7 +52,8 @@ pow(2,n):2^n
 
 n&-n 返回n最低位的2
 原理:-n=~n+1
-
+auto it =find()
+int cur = *it cur是find的值 位置要it-.begin()
 埃氏筛
 vector<int> generatePrimes(int limit) {
     vector<bool> isPrime(limit + 1, true);
