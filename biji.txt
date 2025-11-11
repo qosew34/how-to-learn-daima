@@ -1,6 +1,21 @@
 0.00是-0.00
 考虑0的情况
 
+printf("格式%d格式%s",a,b,c)
+printf("n = %d, x = %.2f, s = %s\n", n, x, s); n对应%d以此类推
+整数：%d 或 %i（int），%u（无符号），%ld（long），%lld（long long）
+进制：%x / %X（16 进制），%o（8 进制）
+浮点：%f（double），%e（指数），%g（自动选 %f/%e）
+字符：%c
+字符串：%s
+指针：%p
+大小类型：%zu（size_t）
+最小宽度：%8d（宽度为 8，右对齐）
+精度：%.2f（小数点后 2 位）
+填充与对齐：%08d（用 0 填充），%-10s（左对齐）
+
+scanf("%d", &a) 注意&引用
+
 快速幂
 int qpow(int a, int n)
 {
@@ -18,12 +33,9 @@ int qpow(int a, int n)
 a.assign(R, vector<int>(C));声明二维数组
 奇葩输入：1957
 二分需要+-1便于修正
-倒序搜索：1003
 1928 栈与pair
-堆 1090
 hash:每个数*某个数的n次方模一个很大的质数
 (条件?条件成立：条件不成立)
-vector<vector<pair<int, int>>>存整数对的二维数组
 pow(x,a)==a^x
 floor,ceil
 sort用法：sort(tp,tp+3);/*tp指向第一个元素，tp+n(n为元素个数)指向最后一个元素之后的位置*/(tp是数组名字)
