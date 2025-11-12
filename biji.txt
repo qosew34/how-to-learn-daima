@@ -66,7 +66,7 @@ n&-n 返回n最低位的2
 原理:-n=~n+1
 auto it =find()
 int cur = *it cur是find的值 位置要it-.begin()
-
+.unique 相邻去重
 stack 栈 可以直接用 底层逻辑是vector
 .push()
 .emplace()
@@ -186,3 +186,4 @@ std::multiset 是 C++ STL (标准模板库) 中的一种关联容器。它内部
 区间查找：使用 equal_range() 查找所有等于某个值的元素范围。
 删除元素：可以使用 erase() 按值或通过迭代器删除元素。
 遍历容器：可以用迭代器依次访问容器中的元素。
+
