@@ -39,38 +39,40 @@ int main(){
     cout<<endl;
     return 0;
 }靠，怎么天天要优化时间和内存*/
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
 
-int main() {
-    string s;
-    getline(cin, s);
-    stack<string> stk;  // 只存父字符串
-    string current = "";  // 当前字符串
-    int num = 0;  // 当前重复数
-    for (char c : s) {
-        if (c == '[') {
-            stk.push(current);  // 压入父层字符串
-            current = "";
-            num = 0;  // 为本层准备解析数字
-        } else if (c == ']') {
-            string parent = stk.top();
-            stk.pop();
-            // 默认重复1次
-            if (num == 0) num = 1;
-            // 重复当前字符串
-            string repeated;
-            repeated.reserve(num * current.size());  // 预分配优化
-            for (int i = 0; i < num; ++i) {
-                repeated += current;
+// 递归解码函数，p为引用参数，表示当前扫描的位置
+string decode(const string& s, int& p) {
+    string res;
+    while (p < s.size()) {
+        if (isdigit(s[p])) {
+            // 解析数字
+            int repeat = 0;
+            while (p < s.size() && isdigit(s[p])) {
+                repeat = repeat * 10 + (s[p] - '0');
+                p++;
             }
-            current = parent + repeated;  // 合并到当前
-        } else if (isdigit(c)) {
-            num = num * 10 + (c - '0');
+            if (p < s.size() && s[p] == '[') {
+                p++; // 跳过 '['
+                string sub = decode(s, p);
+                p++; // 跳过 ']'
+                for (int i = 0; i < repeat; ++i) res += sub;
+            }
+        } else if (s[p] == ']') {
+            return res;
         } else {
-            current += c;
+            res += s[p++];
         }
     }
-    cout << current << endl;  // 最外层即current
+    return res;
+}
+
+int main() {
+    string input;
+    cin >> input;
+    int p = 0;
+    cout << decode(input, p) << endl;
     return 0;
 }
