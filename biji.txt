@@ -84,7 +84,7 @@ vector名字.pop_back 回溯
 | 运算符  | 名称       | 例子     | 结果（二进制）              | 结果（十进制）         |   |
 | ---- | -------- | ------ | -------------------- | --------------- | - |
 | `&`  | 按位与 AND  | 5 & 3  | 101 & 011 → 001      | 1               |   |
-| `    | `        | 按位或 OR | 5 | 3                | 101 | 011 → 111 | 7 |
+| `|`  | 按位或 OR | 5 | 3                | 101 | 011 → 111 | 7 |
 | `^`  | 按位异或 XOR | 5 ^ 3  | 101 ^ 011 → 110      | 6               |   |
 | `~`  | 按位取反 NOT | ~5     | ~00000101 → 11111010 | -6 (补码)         |   |
 | `<<` | 左移       | 5 << 1 | 101 → 1010           | 10              |   |
@@ -124,7 +124,16 @@ if (it_next != storage.end()) {
 }
 
 
+Vector去重
 
+// 排序
+sort(v.begin(), v.end()); // {1, 1, 2, 2, 3, 3}
+
+// unique 去重（把重复的元素移到最后）
+auto it = unique(v.begin(), v.end());
+
+// 删除多余的部分
+v.erase(it, v.end()); // {1, 2, 3}
 
 
 
@@ -155,7 +164,16 @@ return a.first > b.first; //大的优先
 
    priority_queue<pii, vector<pii>, decltype(cmp)> pq(cmp);
    让优先级队列用你的lambda表达式
-
+    struct Node {
+    int a, b;
+    // 可以实现 operator< 但 priority_queue 需要反逻辑
+};
+struct cmp {
+    bool operator()(const Node& x, const Node& y) const {
+        return x.a > y.a;    // 按a的升序排列（小根堆）
+    }
+};
+priority_queue<Node, vector<Node>, cmp> minHeap;注意，只能.top，没有.front
    vector<vector<int>> 邻接表
    邻接表[1]={1,2,3}
    for(int &temp:邻接表)
