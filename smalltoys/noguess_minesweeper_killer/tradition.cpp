@@ -3,7 +3,7 @@
 #include <iostream>
 #include <unordered_map>
 
-void checker_cut(std :: vector<std :: vector<char>> board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
+void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
     //这个点是雷的可能，然后传给下一个checker,如果true传回ismine和isempty
     //非/则过
     if(board[x][y]!='/'){
@@ -18,7 +18,8 @@ void checker_cut(std :: vector<std :: vector<char>> board,int n,int x,int y,std 
             }
         }
         if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-        else checker_cut(board,n,0,y+1,is_empty,is_mine);
+        else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+        return;
     }
     else{
         std :: vector<int> xs = {-1,-1,-1,0,0,1,1,1};
@@ -74,29 +75,38 @@ void checker_cut(std :: vector<std :: vector<char>> board,int n,int x,int y,std 
                 }
             }
         }
-        if(!has_number) checker_cut(board,n,x+1,y,is_empty,is_mine);
+        char pre = board[x][y];
+        if(!has_number){
+            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            is_empty[x][y] = false;
+            is_mine[x][y] = false;
+            return;
+        }
         if(can_be_empty){
             board[x][y] = '?';
             if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else checker_cut(board,n,0,y+1,is_empty,is_mine);
+            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            board[x][y] = pre;
         }
         if(can_be_mine){
             board[x][y] = 'm';
             if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else checker_cut(board,n,0,y+1,is_empty,is_mine);
+            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            board[x][y] = pre;
         }
         board.shrink_to_fit();//释放内存，也许会有用？
     }
 }
 void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
-    std :: cout<<"请输入已知内容，未知则输入/,雷则输入m";
+    std :: cout<<"/ or m or you know"<<std :: endl;
     std :: vector<std ::vector<bool>> is_mine(n,std :: vector<bool>(n,true));
     std :: vector<std ::vector<bool>> is_empty(n,std :: vector<bool>(n,true));
     for(int i = 0 ; i < n ; i++){
         for(int j = 0 ; j < n ; j++){
-            char temp;
+            char temp;std :: cin>>temp;
             while(!((temp>='0'&&temp<='9')||temp=='?'||temp=='/'||temp=='m')){
-                std :: cout<<"请重新输入";
+                std :: cout<<"please reenter";
                 std :: cin>>temp;
             }
             board[i][j] = temp;
@@ -105,9 +115,9 @@ void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
         }
     }
     int total = -1;
-    std :: cout<<"如果雷剩余数量已知，输入雷数量，否则输入-1";
+    std :: cout<<"tell me the total number of mines if you know, if not, input -1";
     std :: cin>>total;
-    std :: cout<<"你先别急";
+    std :: cout<<"don't worry"<<std :: endl;
     //没什么好的思路，穷举？
     //回溯
     if(total == -1){//启动剪枝
