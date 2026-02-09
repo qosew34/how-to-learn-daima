@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
-std :: vector<std :: vector<char>>& board;
+
 void checker_cut(std :: vector<std :: vector<char>> board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
     //这个点是雷的可能，然后传给下一个checker,如果true传回ismine和isempty
     //非/则过
@@ -116,8 +116,8 @@ void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
     else if(total!=-1){
         //明天再写
     }
-    for(int i = 0 ; i < n - 1 ; i ++){
-        for(int j = 0 ; j < n - 1 ; j++){
+    for(int i = 0 ; i <= n - 1 ; i ++){
+        for(int j = 0 ; j <= n - 1 ; j++){
             if(is_empty[i][j]) board[i][j] = '?';
             if(is_mine[i][j]) board[i][j] = 'm';
             std :: cout<<board[i][j]<<" ";
