@@ -2,7 +2,20 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
-void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine,int total){
+bool is_c1_checker(std::vector<std::vector<char>>& board,int x ,int y){
+    static const int dx[8] = {-1,-1,-1, 0, 0, 1, 1, 1};
+    static const int dy[8] = {-1, 0, 1,-1, 1,-1, 0, 1};
+
+    for (int k = 0; k < 8; ++k) {
+        int nx = x + dx[k];
+        int ny = y + dy[k];
+        if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5) {
+            if (board[nx][ny] == 'm') return true;
+        }
+    }
+    return false;
+}
+void c1_checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine,int total){
     if(board[x][y]!='/'){
         if(x==n-1&&y==n-1){
             int total_m = 0;
@@ -21,8 +34,8 @@ void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,
                     }
             }
         }
-        if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-        else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+        if(x!=n-1) c1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+        else if(y!=n-1) c1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
         return;
     }
     else{
@@ -88,24 +101,29 @@ void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,
         char pre = board[x][y];
         if(can_be_empty){
             board[x][y] = '?';
-            if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-            else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+            if(x!=n-1) c1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+            else if(y!=n-1) c1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
             board[x][y] = pre;
         }
         if(can_be_mine){
             board[x][y] = 'm';
-            if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-            else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+            if(x!=n-1) c1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+            else if(y!=n-1) c1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
             board[x][y] = pre;
         }
         
     }
 }
-void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
+void c1_checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
     //这个点是雷的可能，然后传给下一个checker,如果true传回ismine和isempty
     //非/则过
     if(board[x][y]!='/'){
         if(x==n-1&&y==n-1){
+            for(int i = 0 ; i < n ; i++){
+                for(int j = 0 ; j < n ; j++){
+                    if(board[i][j]=='m') if(!is_c1_checker(board,i,j)) return;
+                }
+            }
             for(int i = 0 ; i < n ; i++){
                     for(int j = 0 ; j < n ; j++){
                         if(board[i][j]=='/'||board[i][j]=='?') is_empty[i][j] = is_empty[i][j]&true;
@@ -115,8 +133,8 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
                     }
             }
         }
-        if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-        else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+        if(x!=n-1) c1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+        else if(y!=n-1) c1_checker_cut(board,n,0,y+1,is_empty,is_mine);
         return;
     }
     else{
@@ -150,8 +168,14 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
             }
         }
         if(x==n-1&&y==n-1){
+            
             if(can_be_empty){
                 board[x][y] = '?';
+                for(int i = 0 ; i < n ; i++){
+                for(int j = 0 ; j < n ; j++){
+                    if(board[i][j]=='m') if(!is_c1_checker(board,i,j)) return;
+                }
+            }
                 for(int i = 0 ; i < n ; i++){
                     for(int j = 0 ; j < n ; j++){
                         if(board[i][j]=='/'||board[i][j]=='?') is_empty[i][j] = is_empty[i][j]&true;
@@ -164,6 +188,11 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
             if(can_be_mine){
                 board[x][y] = 'm';
                 for(int i = 0 ; i < n ; i++){
+                for(int j = 0 ; j < n ; j++){
+                    if(board[i][j]=='m') if(!is_c1_checker(board,i,j)) return;
+                }
+            }
+                for(int i = 0 ; i < n ; i++){
                     for(int j = 0 ; j < n ; j++){
                         if(board[i][j]=='/'||board[i][j]=='?') is_empty[i][j] = is_empty[i][j]&true;
                         else is_empty[i][j] = false;
@@ -175,27 +204,27 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
         }
         char pre = board[x][y];
         if(!has_number){
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) c1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) c1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             is_empty[x][y] = false;
             is_mine[x][y] = false;
             return;
         }
         if(can_be_empty){
             board[x][y] = '?';
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) c1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) c1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             board[x][y] = pre;
         }
         if(can_be_mine){
             board[x][y] = 'm';
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) c1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) c1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             board[x][y] = pre;
         }
     }
 }
-void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
+void c1_killer(std :: vector<std :: vector<char>>& board,int n){
     std :: cout<<"please input the board,if blank,replace it by / "<<std :: endl;
     std :: vector<std ::vector<bool>> is_mine(n,std :: vector<bool>(n,true));
     std :: vector<std ::vector<bool>> is_empty(n,std :: vector<bool>(n,true));
@@ -217,10 +246,10 @@ void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
     //没什么好的思路，穷举？
     //回溯
     if(total == -1){//启动剪枝
-        checker_cut(board,n,0,0,is_empty,is_mine);
+        c1_checker_cut(board,n,0,0,is_empty,is_mine);
     }
     else if(total!=-1){
-        checker_notcut(board,n,0,0,is_empty,is_mine,total);
+        c1_checker_notcut(board,n,0,0,is_empty,is_mine,total);
     }
     for(int i = 0 ; i <= n - 1 ; i ++){
         for(int j = 0 ; j <= n - 1 ; j++){

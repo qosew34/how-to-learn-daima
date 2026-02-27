@@ -2,7 +2,9 @@
 #include <vector>
 #include <iostream>
 #include <unordered_map>
-void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine,int total){
+//和普通版相比，结算的时候要检查每四格是否有m
+//没想法，后面再改
+void q1_checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine,int total){
     if(board[x][y]!='/'){
         if(x==n-1&&y==n-1){
             int total_m = 0;
@@ -12,6 +14,20 @@ void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,
                 }
             }
             if(total_m!=total) return;
+            std :: vector<std :: vector<bool>> pre(n-1,std:: vector<bool>(n-1,false));
+            for(int i = 0 ; i < n ; i++){
+                for(int j = 0 ; j < n ; j++){
+                    if(board[i][j]=='m'){
+                        if(i+1 <= n-2 && j+1 <= n-2) pre[i+1][j+1] = true;
+                        if(i <= n-2 && j <= n-2) pre[i][j] = true;
+                        if(i <= n-2 && j+1 <= n-2) pre[i][j+1] = true;
+                        if(i+1 <= n-2 && j <= n-2) pre[i+1][j] = true;
+                    }
+                }
+            }
+            bool cannot = true;
+            for(auto a : pre)for(auto b : a) cannot = cannot&&b;
+            if(!cannot) return;
             for(int i = 0 ; i < n ; i++){
                     for(int j = 0 ; j < n ; j++){
                         if(board[i][j]=='/'||board[i][j]=='?') is_empty[i][j] = is_empty[i][j]&true;
@@ -21,8 +37,8 @@ void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,
                     }
             }
         }
-        if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-        else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+        if(x!=n-1) q1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+        else if(y!=n-1) q1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
         return;
     }
     else{
@@ -85,23 +101,39 @@ void checker_notcut(std :: vector<std :: vector<char>> &board,int n,int x,int y,
             }
             if(count_m>total) return;
         }
+        if(x>0&&y>0&&is_empty[x][y]){
+            char a = board[x-1][y-1] , b = board[x][y-1] , c = board[x-1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x>0&&y<n-1&&is_empty[x][y]){
+            char a = board[x-1][y+1] , b = board[x][y+1] , c = board[x-1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x<n-1&&y<n-1&&is_empty[x][y]){
+            char a = board[x+1][y+1] , b = board[x][y+1] , c = board[x+1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x<n-1&&y>0&&is_empty[x][y]){
+            char a = board[x+1][y-1] , b = board[x][y-1] , c = board[x+1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
         char pre = board[x][y];
         if(can_be_empty){
             board[x][y] = '?';
-            if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-            else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+            if(x!=n-1) q1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+            else if(y!=n-1) q1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
             board[x][y] = pre;
         }
         if(can_be_mine){
             board[x][y] = 'm';
-            if(x!=n-1) checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
-            else if(y!=n-1) checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
+            if(x!=n-1) q1_checker_notcut(board,n,x+1,y,is_empty,is_mine,total);
+            else if(y!=n-1) q1_checker_notcut(board,n,0,y+1,is_empty,is_mine,total);
             board[x][y] = pre;
         }
         
     }
 }
-void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
+void q1_checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std :: vector<std ::vector<bool>>&is_empty,std :: vector<std ::vector<bool>>&is_mine){
     //这个点是雷的可能，然后传给下一个checker,如果true传回ismine和isempty
     //非/则过
     if(board[x][y]!='/'){
@@ -115,8 +147,8 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
                     }
             }
         }
-        if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-        else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+        if(x!=n-1) q1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+        else if(y!=n-1) q1_checker_cut(board,n,0,y+1,is_empty,is_mine);
         return;
     }
     else{
@@ -149,6 +181,25 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
                 }
             }
         }
+        //如果周围四格皆非/，那么必为m
+        if(has_number){
+        if(x>0&&y>0&&is_empty[x][y]){
+            char a = board[x-1][y-1] , b = board[x][y-1] , c = board[x-1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x>0&&y<n-1&&is_empty[x][y]){
+            char a = board[x-1][y+1] , b = board[x][y+1] , c = board[x-1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x<n-1&&y<n-1&&is_empty[x][y]){
+            char a = board[x+1][y+1] , b = board[x][y+1] , c = board[x+1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        if(x<n-1&&y>0&&is_empty[x][y]){
+            char a = board[x+1][y-1] , b = board[x][y-1] , c = board[x+1][y];
+            if(a!='m'&&a!='/'&&b!='m'&&b!='/'&&c!='m'&&c!='/') is_empty[x][y] = false;
+        }
+        }
         if(x==n-1&&y==n-1){
             if(can_be_empty){
                 board[x][y] = '?';
@@ -173,29 +224,30 @@ void checker_cut(std :: vector<std :: vector<char>> &board,int n,int x,int y,std
                 }
             }
         }
+
         char pre = board[x][y];
         if(!has_number){
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) q1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) q1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             is_empty[x][y] = false;
             is_mine[x][y] = false;
             return;
         }
         if(can_be_empty){
             board[x][y] = '?';
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) q1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) q1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             board[x][y] = pre;
         }
         if(can_be_mine){
             board[x][y] = 'm';
-            if(x!=n-1) checker_cut(board,n,x+1,y,is_empty,is_mine);
-            else if(y!=n-1) checker_cut(board,n,0,y+1,is_empty,is_mine);
+            if(x!=n-1) q1_checker_cut(board,n,x+1,y,is_empty,is_mine);
+            else if(y!=n-1) q1_checker_cut(board,n,0,y+1,is_empty,is_mine);
             board[x][y] = pre;
         }
     }
 }
-void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
+void q1_killer(std :: vector<std :: vector<char>>& board,int n){
     std :: cout<<"please input the board,if blank,replace it by / "<<std :: endl;
     std :: vector<std ::vector<bool>> is_mine(n,std :: vector<bool>(n,true));
     std :: vector<std ::vector<bool>> is_empty(n,std :: vector<bool>(n,true));
@@ -217,10 +269,10 @@ void tradition_killer(std :: vector<std :: vector<char>>& board,int n){
     //没什么好的思路，穷举？
     //回溯
     if(total == -1){//启动剪枝
-        checker_cut(board,n,0,0,is_empty,is_mine);
+        q1_checker_cut(board,n,0,0,is_empty,is_mine);
     }
     else if(total!=-1){
-        checker_notcut(board,n,0,0,is_empty,is_mine,total);
+        q1_checker_notcut(board,n,0,0,is_empty,is_mine,total);
     }
     for(int i = 0 ; i <= n - 1 ; i ++){
         for(int j = 0 ; j <= n - 1 ; j++){
