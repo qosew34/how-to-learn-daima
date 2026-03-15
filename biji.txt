@@ -1,6 +1,10 @@
 0.00是-0.00
 考虑0的情况
+math库 tan和atan
+atan2可以扩展到360度
+std::atan2(y, x)
 
+注意题目中的 ascii顺序
 printf("格式%d格式%s",a,b,c)
 printf("n = %d, x = %.2f, s = %s\n", n, x, s); n对应%d以此类推
 整数：%d 或 %i（int），%u（无符号），%ld（long），%lld（long long）
@@ -90,7 +94,7 @@ vector名字.pop_back 回溯
 | `<<` | 左移       | 5 << 1 | 101 → 1010           | 10              |   |
 | `>>` | 右移       | 5 >> 1 | 101 → 10             | 2               |   |
 
-
+把 “a XOR b = x” 转化为 “b = a XOR x”
 n&-n 返回n最低位的2
 原理:-n=~n+1
 auto it =find()
@@ -269,6 +273,10 @@ multiset 可以有重复元素自动升序的vector，元素自带const
 root->left = new TreeNode(2);
 root->right = new TreeNode(3);
 //指针相关，new构造的不会自动释放，需要delete
+
+
+
+
 
 Morris 中序遍历
 
