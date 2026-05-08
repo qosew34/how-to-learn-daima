@@ -13,9 +13,55 @@ strcmp（a,b)比较字符串
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
+
+multiset<long long> s;
+
+// 插入
+s.insert(x);
+
+// 找 ≤ b 最大
+auto it = s.upper_bound(b);
+if(it != s.begin()){
+    --it;
+    long long val = *it;
+    s.erase(it);
+}
+
+// 判空
+if(s.empty())
+
+// 最小
+*s.begin()
+
+// 最大
+*prev(s.end())
+
+for(auto x : s) cout << x << " ";
+
+或者：
+
+for(auto it = s.begin(); it != s.end(); it++){
+    cout << *it << " ";
+}
+🔹 4. 删除（重点！）
+❗ 删除所有值
+s.erase(5);
+
+👉 会删掉 所有 5
+
+✅ 只删除一个（推荐）
+auto it = s.find(5);
+if(it != s.end()) s.erase(it);
+
 把 “a XOR b = x” 转化为 “b = a XOR x”
 n&-n 返回n最低位的2
 原理:-n=~n+1
+
+vector<int> a = {1, 2, 3};
+vector<int> b = {4, 5, 6};
+
+a.insert(a.end(), b.begin(), b.end());
+
 
 0.00是-0.00
 考虑0的情况
@@ -303,3 +349,67 @@ while ((c = getchar()) != '\n') {
 
 每回合可选择 若干个  ai>0，并把所选的每个 ai 都减 1；最后能走的人赢
 按位异或，x=0谁走谁输，否则谁走谁赢
+
+
+Manacher（马拉车算法） 是一个专门用来处理：
+
+所有回文子串
+
+的算法，而且非常强：
+
+时间复杂度：O(n)
+🧠 它解决什么问题？
+
+比如字符串（或数组）：
+
+a b a c a b a
+
+普通做法找回文：
+
+中心扩散 → O(n²)
+
+而 Manacher 可以做到：
+
+一次遍历 → 求出每个位置的“最大回文半径”
+🔑 核心思想（通俗版）
+👉 把奇偶回文统一处理
+
+原数组：
+
+1 2 1
+
+变成：
+
+# 1 # 2 # 1 #
+
+这样：
+
+奇数回文 ✔
+偶数回文 ✔
+统一成一种情况
+🔥 核心数组
+p[i] = 以 i 为中心的回文半径
+
+比如：
+
+# 1 # 2 # 1 #
+      ↑
+      i
+
+p[i] = 3 表示能扩 3 层
+
+⚡ 关键优化（核心）
+
+维护两个变量：
+
+C = 当前回文中心
+R = 当前最右边界
+
+当你计算 i 时：
+
+如果 i 在 R 内：
+p[i] = min(p[对称点], R - i)
+
+👉 不用重新扩！
+
+然后再尝试继续扩展。
